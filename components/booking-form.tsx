@@ -1,8 +1,7 @@
 "use client"
 
-import { useState, useRef, useCallback } from "react"
-import { Send, Upload, X, ImageIcon, CalendarDays } from "lucide-react"
-import Image from "next/image"
+import { useState } from "react"
+import { Send, CalendarDays } from "lucide-react"
 
 const tattooStyles = [
   "Realismo",
@@ -41,24 +40,17 @@ const timeSlots = [
   "18:00",
 ]
 
-const WHATSAPP_NUMBER = "521234567890" // Replace with your actual number
+const WHATSAPP_NUMBER = "+523326116812" // Replace with your actual number
 
 /* ------------------------------------------------------------------ */
 /*  Cambia esta URL por la de tu Google Calendar publico.              */
 /*  Google Calendar > Configuracion > Integrar calendario              */
 /*  > Copia la URL del iframe "Insertar codigo"                        */
 /* ------------------------------------------------------------------ */
-const GOOGLE_CALENDAR_EMBED_URL =
-  "https://calendar.google.com/calendar/embed?src=en.mexican%23holiday%40group.v.calendar.google.com&ctz=America%2FMexico_City&showTitle=0&showNav=1&showDate=1&showPrint=0&showTabs=0&showCalendars=0&showTz=0&mode=WEEK"
-
+const GOOGLE_CALENDAR_EMBED_URL = "https://calendar.google.com/calendar/embed?src=ffc5d2e18dcd6ab71d0c1f3e3c99d00fbf734ce59aaac5ecc0294a33ed3bebf8%40group.calendar.google.com&ctz=America%2FMexico_City"
 export function BookingForm() {
   const [selectedDate, setSelectedDate] = useState("")
   const [selectedTime, setSelectedTime] = useState("")
-  const [referenceImages, setReferenceImages] = useState<
-    { file: File; preview: string }[]
-  >([])
-  const [isDragging, setIsDragging] = useState(false)
-  const fileInputRef = useRef<HTMLInputElement>(null)
   const [form, setForm] = useState({
     nombre: "",
     telefono: "",
@@ -67,49 +59,6 @@ export function BookingForm() {
     tamano: "",
     descripcion: "",
   })
-
-  const MAX_FILES = 5
-
-  const addFiles = useCallback(
-    (files: FileList | File[]) => {
-      const newFiles = Array.from(files)
-        .filter((f) => f.type.startsWith("image/"))
-        .slice(0, MAX_FILES - referenceImages.length)
-        .map((file) => ({
-          file,
-          preview: URL.createObjectURL(file),
-        }))
-      setReferenceImages((prev) => [...prev, ...newFiles].slice(0, MAX_FILES))
-    },
-    [referenceImages.length]
-  )
-
-  const removeImage = useCallback((index: number) => {
-    setReferenceImages((prev) => {
-      const removed = prev[index]
-      URL.revokeObjectURL(removed.preview)
-      return prev.filter((_, i) => i !== index)
-    })
-  }, [])
-
-  const handleDrop = useCallback(
-    (e: React.DragEvent) => {
-      e.preventDefault()
-      setIsDragging(false)
-      if (e.dataTransfer.files) addFiles(e.dataTransfer.files)
-    },
-    [addFiles]
-  )
-
-  const handleDragOver = useCallback((e: React.DragEvent) => {
-    e.preventDefault()
-    setIsDragging(true)
-  }, [])
-
-  const handleDragLeave = useCallback((e: React.DragEvent) => {
-    e.preventDefault()
-    setIsDragging(false)
-  }, [])
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -131,7 +80,7 @@ export function BookingForm() {
     form.zona &&
     form.descripcion
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.SubmitEvent) => {
     e.preventDefault()
     if (!selectedDate || !selectedTime) return
 
@@ -143,21 +92,16 @@ export function BookingForm() {
       year: "numeric",
     })
 
-    const imageNote =
-      referenceImages.length > 0
-        ? `\n*Imagenes de referencia:* ${referenceImages.length} imagen(es) adjunta(s) — las envio en el siguiente mensaje`
-        : ""
-
     const message = `Hola! Quiero agendar una cita de tatuaje:
 
-*Nombre:* ${form.nombre}
-*Telefono:* ${form.telefono}
-*Fecha:* ${fechaFormatted}
-*Hora:* ${selectedTime}
-*Estilo:* ${form.estilo}
-*Zona del cuerpo:* ${form.zona}
-*Tamano aprox:* ${form.tamano}
-*Descripcion:* ${form.descripcion}${imageNote}`
+    *Nombre:* ${form.nombre}
+    *Telefono:* ${form.telefono}
+    *Fecha:* ${fechaFormatted}
+    *Hora:* ${selectedTime}
+    *Estilo:* ${form.estilo}
+    *Zona del cuerpo:* ${form.zona}
+    *Tamano aprox:* ${form.tamano}
+    *Descripcion:* ${form.descripcion}`
 
     const encoded = encodeURIComponent(message)
     window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encoded}`, "_blank")
@@ -389,104 +333,6 @@ export function BookingForm() {
                   onChange={handleChange}
                   className={`${inputClasses} resize-none`}
                 />
-              </div>
-
-              {/* Reference Images Upload */}
-              <div>
-                <label className="text-xs uppercase tracking-widest text-muted-foreground mb-2 block">
-                  Imagenes de referencia{" "}
-                  <span className="normal-case tracking-normal text-muted-foreground/50">
-                    (opcional, max {MAX_FILES})
-                  </span>
-                </label>
-
-                {/* Drop zone */}
-                <div
-                  onDrop={handleDrop}
-                  onDragOver={handleDragOver}
-                  onDragLeave={handleDragLeave}
-                  onClick={() => fileInputRef.current?.click()}
-                  role="button"
-                  tabIndex={0}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" || e.key === " ") {
-                      e.preventDefault()
-                      fileInputRef.current?.click()
-                    }
-                  }}
-                  className={`relative flex flex-col items-center justify-center gap-2 rounded-md border-2 border-dashed px-4 py-6 cursor-pointer transition-all ${
-                    isDragging
-                      ? "border-primary bg-primary/10"
-                      : "border-border hover:border-primary/50 hover:bg-secondary/50"
-                  } ${referenceImages.length >= MAX_FILES ? "opacity-40 pointer-events-none" : ""}`}
-                >
-                  <Upload className="h-6 w-6 text-muted-foreground" />
-                  <p className="text-sm text-muted-foreground text-center">
-                    <span className="text-primary font-medium">
-                      Haz clic para subir
-                    </span>{" "}
-                    o arrastra tus imagenes aqui
-                  </p>
-                  <p className="text-xs text-muted-foreground/50">
-                    PNG, JPG o WEBP
-                  </p>
-                  <input
-                    ref={fileInputRef}
-                    type="file"
-                    accept="image/*"
-                    multiple
-                    className="hidden"
-                    onChange={(e) => {
-                      if (e.target.files) addFiles(e.target.files)
-                      e.target.value = ""
-                    }}
-                  />
-                </div>
-
-                {/* Thumbnails */}
-                {referenceImages.length > 0 && (
-                  <div className="mt-3 flex flex-wrap gap-3">
-                    {referenceImages.map((img, idx) => (
-                      <div
-                        key={img.preview}
-                        className="group relative h-20 w-20 rounded-md overflow-hidden border border-border bg-secondary"
-                      >
-                        <Image
-                          src={img.preview}
-                          alt={`Referencia ${idx + 1}`}
-                          fill
-                          className="object-cover"
-                        />
-                        <button
-                          type="button"
-                          onClick={() => removeImage(idx)}
-                          className="absolute inset-0 flex items-center justify-center bg-background/70 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
-                          aria-label={`Eliminar imagen ${idx + 1}`}
-                        >
-                          <X className="h-5 w-5 text-destructive" />
-                        </button>
-                      </div>
-                    ))}
-
-                    {referenceImages.length < MAX_FILES && (
-                      <button
-                        type="button"
-                        onClick={() => fileInputRef.current?.click()}
-                        className="flex h-20 w-20 items-center justify-center rounded-md border-2 border-dashed border-border hover:border-primary/50 transition-colors cursor-pointer"
-                        aria-label="Agregar otra imagen"
-                      >
-                        <ImageIcon className="h-5 w-5 text-muted-foreground" />
-                      </button>
-                    )}
-                  </div>
-                )}
-
-                {referenceImages.length > 0 && (
-                  <p className="mt-2 text-xs text-muted-foreground/60">
-                    Las imagenes se enviaran como mensaje aparte en WhatsApp
-                    despues de tu solicitud.
-                  </p>
-                )}
               </div>
 
               {/* Submit */}

@@ -33,7 +33,7 @@ const styles = [
 },
 ]
 
-export function StylesSection() {
+export const StylesSection = () => {
   return (
     <section id="estilos" className="py-24 px-6 bg-card">
       <div className="mx-auto max-w-7xl">

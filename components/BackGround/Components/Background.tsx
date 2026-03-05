@@ -10,7 +10,5 @@ export const Background = () => {
             className="object-contain object-center scale-200"
             priority
         />
-
-
     )
 }

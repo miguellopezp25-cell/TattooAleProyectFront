@@ -1,8 +1,8 @@
 import { Navbar } from "@/components/NavBar/navbar"
 import { BackgroundTheme } from "@/components/BackGround/Background"
-import { Gallery } from "@/components/gallery"
+import { Gallery } from "@/components/galery/gallery"
 import { StylesSection } from "@/components/styles-section"
-import { StudioSection } from "@/components/studio-section"
+import { StudioSection } from "@/components/StudioSeccion.tsx/studio-section"
 import { BookingForm } from "@/components/booking-form"
 import { Footer } from "@/components/Footer/footer"
 

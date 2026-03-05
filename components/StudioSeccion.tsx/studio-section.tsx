@@ -3,7 +3,7 @@ import { ShieldCheck, Award, Clock, Sparkles, MapPin, Navigation } from "lucide-
 
 const features = [
   { icon: ShieldCheck, label: "100% Esterilizado", desc: "Equipos desechables y autoclave de grado hospitalario." },
-  { icon: Award, label: "+10 Años Experiencia", desc: "Artistas con trayectoria internacional y premiados." },
+  { icon: Award, label: "+5 Años Experiencia", desc: "Artistas con trayectoria internacional y premiados." },
   { icon: Clock, label: "Horario Flexible", desc: "Nos adaptamos a tu agenda para tu comodidad." },
   { icon: Sparkles, label: "Tintas Premium", desc: "Solo usamos tintas veganas y certificadas." },
 ]
@@ -27,7 +27,7 @@ export function StudioSection() {
           <div className="relative aspect-[4/3] overflow-hidden rounded-sm">
             <Image
               src="/images/studio.jpg"
-              alt="Interior del estudio INK NOIR"
+              alt="Interior del estudio"
               fill
               className="object-cover"
             />
