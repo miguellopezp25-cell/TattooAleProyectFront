@@ -1,35 +1,34 @@
-import React, { useState } from 'react'
-import { NavLinks } from '../navbar'
+// NavbarComponents/MobileMenu.tsx
+import { NavLinks } from "../navbar"
 
-export const MobileMenu = () => {
-          const [open, setOpen] = useState(false)
-    
+export const MobileMenu = ({ isOpen }: { isOpen: boolean }) => {
+  if (!isOpen) return null;
+
   return (
-  <>
-        {open && (
-        <div className="md:hidden bg-background border-t border-border px-6 pb-6">
-          <ul className="flex flex-col gap-4 pt-4">
-            {NavLinks.map((l) => (
-              <li key={l.href}>
-                <a
-                  href={l.href}
-                  onClick={() => setOpen(false)}
-                  className="text-sm uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors"
-                >
-                  {l.label}
-                </a>
-              </li>
-            ))}
-          </ul>
-          <a
-            href="#agendar"
-            onClick={() => setOpen(false)}
-            className="mt-4 inline-flex items-center px-5 py-2 text-sm uppercase tracking-widest bg-primary text-primary-foreground hover:bg-primary/90 transition-colors rounded-sm"
-          >
-            Reservar Cita
-          </a>
-        </div>
-      )}
-  </>
+    <div className="md:hidden bg-background border-t border-border p-6">
+      <ul className="flex flex-col gap-6">
+        {NavLinks.map((link) => (
+          <li key={link.label}>
+            {/* EL LABEL DEL PADRE */}
+            <a href={link.href} className="text-xl uppercase tracking-widest text-foreground">
+              {link.label}
+            </a>
+            
+            {/* LOS LABELS DE LOS HIJOS (Sub-links de Galería) */}
+            {link.children && (
+              <ul className="pl-4 mt-4 flex flex-col gap-3">
+                {link.children.map(child => (
+                  <li key={child.label}>
+                    <a href={child.href} className="text-muted-foreground text-sm uppercase">
+                       {child.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </li>
+        ))}
+      </ul>
+    </div>
   )
 }
