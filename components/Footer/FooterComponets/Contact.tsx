@@ -11,7 +11,7 @@ export const Contact = () => {
                 </li>
                 <li className="flex items-center gap-3">
                     <MapPin className="h-4 w-4 text-primary shrink-0" />
-                    San Antonio 123, Jalisco
+                    San Antonio, Jalisco
                 </li>
                 <li className="flex items-center gap-3">
                     <Clock className="h-4 w-4 text-primary shrink-0" />

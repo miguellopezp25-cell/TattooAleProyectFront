@@ -21,6 +21,20 @@ export const Brand = () => {
                 />
                 @_tattooale_
             </a>
+            <br />
+            <a
+                href="https://www.facebook.com/evelyn.aguayo.545"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-4 inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors"
+            >
+                <img
+                    src="/facebook.svg"
+                    alt="Facebook"
+                    className="h-5 w-5"
+                />
+                Evelyn Aguayo
+            </a>
         </div>
     )
 }
