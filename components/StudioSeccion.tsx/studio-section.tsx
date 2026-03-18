@@ -42,7 +42,7 @@ export function StudioSection() {
               Un Estudio Hecho Para El Arte
             </h2>
             <p className="mt-4 text-muted-foreground leading-relaxed">
-              Nuestro estudio combina un ambiente creativo e inspirador con los mas altos
+              Mi estudio combina un ambiente creativo e inspirador con los mas altos
               estandares de higiene y profesionalismo. Aqui, cada detalle esta pensado para
               que tu experiencia sea excepcional.
             </p>
